@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How was your day today? Share your feelings with a simple click!">
+    <title>How Was Your Day?</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        let happyCount = 0;
+        let sadCount = 0;
+
+        const happyMessages = [
+            "Keep smiling, the world needs your light! 🎉",
+            "Every smile is a step closer to joy! 🌟",
+            "You spread happiness wherever you go! 🌈",
+            "Life is better when you're laughing! 😄"
+        ];
+
+        const sadMessages = [
+            "Even the darkest night will end, and the sun will rise. 💪",
+            "Fall seven times, stand up eight. 💕",
+            "You are braver than you believe, stronger than you seem, and smarter than you think. 🌞",
+            "Don't be pushed by your problems, be led by your dreams. ✨"
+        ];
+
+        function updateCount(type) {
+            if (type === 'happy') {
+                happyCount++;
+                document.getElementById('happy-count').textContent = happyCount;
+                showFeedback('happy');
+            } else {
+                sadCount++;
+                document.getElementById('sad-count').textContent = sadCount;
+                showFeedback('sad');
+            }
+        }
+
+        function showFeedback(type) {
+            const feedback = document.getElementById('feedback');
+            const randomIndex = Math.floor(Math.random() * (type === 'happy' ? happyMessages.length : sadMessages.length));
+            feedback.textContent = type === 'happy' ? happyMessages[randomIndex] : sadMessages[randomIndex];
+            feedback.className = type;
+            feedback.style.fontSize = '2em';
+
+            if (type === 'happy') {
+                document.body.classList.add('happy-mode');
+                setTimeout(() => document.body.classList.remove('happy-mode'), 2000);
+            } else {
+                document.body.classList.add('sad-mode');
+                setTimeout(() => document.body.classList.remove('sad-mode'), 2000);
+            }
+        }
+
+        function shareTo(platform) {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent("How was your day? Share your mood and see how others feel too!");
+            let shareUrl = "";
+
+            switch (platform) {
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+                    break;
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    break;
+                case 'instagram':
+                    alert("Instagram sharing is not supported directly. Please copy the link and share manually.");
+                    return;
+                case 'reddit':
+                    shareUrl = `https://www.reddit.com/submit?url=${url}&title=${text}`;
+                    break;
+            }
+            window.open(shareUrl, '_blank');
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>How Was Your Day Today?</h1>
+            <p>Click on your mood and see how others feel too!</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container mood-section">
+            <div class="mood" onclick="updateCount('happy')">
+                <img src="happy-face.png" alt="Happy Face" class="mood-icon">
+                <p>Happy</p>
+                <p id="happy-count">0</p>
+            </div>
+            <div class="mood" onclick="updateCount('sad')">
+                <img src="sad-face.png" alt="Sad Face" class="mood-icon">
+                <p>Sad</p>
+                <p id="sad-count">0</p>
+            </div>
+        </div>
+        <div id="feedback" class="feedback"></div>
+        <div class="share-buttons">
+            <button onclick="shareTo('twitter')">Share on Twitter</button>
+            <button onclick="shareTo('facebook')">Share on Facebook</button>
+            <button onclick="shareTo('instagram')">Share on Instagram</button>
+            <button onclick="shareTo('reddit')">Share on Reddit</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Mood Tracker. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: linear-gradient(120deg, #f6d365, #fda085);
+            transition: background-color 0.5s;
+        }
+        header {
+            background-color: #4caf50;
+            color: white;
+            padding: 20px 0;
+        }
+        .mood-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 50px 0;
+        }
+        .mood {
+            margin: 0 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .mood:hover {
+            transform: scale(1.1);
+        }
+        .mood-icon {
+            width: 150px;
+            height: 150px;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #333;
+        }
+        .feedback.happy {
+            color: #4caf50;
+        }
+        .feedback.sad {
+            color: #f44336;
+        }
+        .share-buttons button {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .share-buttons button:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+        }
+        .happy-mode {
+            background: radial-gradient(circle, #ffecb3, #ffab40);
+            animation: confetti 2s linear;
+        }
+        .sad-mode {
+            background: radial-gradient(circle, #e57373, #c62828);
+        }
+
+        @keyframes confetti {
+            from { background-position: top; }
+            to { background-position: bottom; }
+        }
+    </style>
+</body>
+</html>
